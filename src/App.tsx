@@ -1,14 +1,11 @@
-//src/App.tsx
-
-import ParametrosBox from "./components/ParametrosBox";
-import Simulacion3D from "./components/Simulacion3D";
+// src/App.tsx
+import Pendulo from './components/Pendulo';
 
 function App() {
   return (
-    <>
-      <ParametrosBox />
-      <Simulacion3D />
-    </>
+    <div className="min-h-screen flex items-center justify-center bg-slate-100">
+      <Pendulo />
+    </div>
   );
 }
 

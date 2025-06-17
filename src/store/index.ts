@@ -1,14 +1,12 @@
+// src/store/index.ts
 import { configureStore } from '@reduxjs/toolkit';
-import parametrosReducer from './parametros/parametrosSlice';
-
+import simuladorReducer from './simuladorSlice';
 
 export const store = configureStore({
   reducer: {
-    parametros: parametrosReducer,
+    simulador: simuladorReducer,
   },
 });
 
-// Inferencia de tipos para usar en componentes
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
-
