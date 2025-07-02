@@ -18,7 +18,6 @@ const Pendulo: React.FC = () => {
   const length = 150;
   const pxToMeters = 1 / 100;
   const lengthMeters = length * pxToMeters;
-  const g = 0.4;
   const damping = 0.995;
 
   // Bola y mundo
@@ -122,7 +121,7 @@ const Pendulo: React.FC = () => {
         const newVelY = freeFallVelY + appliedGravity;
         let newY = freeFallY + newVelY;
 
-        if (frameCount % 70 === 0) {
+        if (frameCount % 40 === 0 && velocityX !== 0) {
           generate(worldOffsetX, canvas.width, canvas.height);
         }
 
@@ -322,6 +321,9 @@ const Pendulo: React.FC = () => {
           Aplicar Cambios
         </button>
       </div>
+      <p className="text-xs text-gray-500 mt-2">
+        Obstáculos en pantalla: {obstacles.length}
+      </p>
     </div>
   );
 };

@@ -7,7 +7,7 @@ export interface Obstacle {
   y: number;
   width: number;
   height: number;
-  type: number; // 1, 2 o 3
+  type: number;
 }
 
 export const useObstacles = () => {
@@ -16,23 +16,22 @@ export const useObstacles = () => {
 
   const generate = (worldOffsetX: number, canvasWidth: number, canvasHeight: number) => {
     const distanceFromLast = (worldOffsetX + canvasWidth) - lastX;
-
-    if (distanceFromLast < 200) return;
+    if (distanceFromLast < 150) return; // más sensible
 
     const type = Math.floor(Math.random() * 3) + 1;
-    const obsWidth = type === 1 ? 80 : type === 2 ? 50 : 100;
-    const obsHeight = type === 1 ? 20 : type === 2 ? 40 : 30;
-    const obsX = worldOffsetX + canvasWidth + Math.random() * 50;
-    const obsY = Math.random() * (canvasHeight - 100) + 200;
+    const obsWidth = type === 1 ? 40 : type === 2 ? 60 : 100;
+    const obsHeight = type === 1 ? 20 : type === 2 ? 40 : 60;
+
+    const obsX = worldOffsetX + canvasWidth - 100 + Math.random() * 150;
+    const floorY = canvasHeight - 20;
+    const obsY = floorY - obsHeight;
 
     setObstacles(prev => [...prev, { x: obsX, y: obsY, width: obsWidth, height: obsHeight, type }]);
     setLastX(obsX);
   };
 
   const update = (velocityX: number) => {
-    setObstacles(prev =>
-      prev.map(obs => ({ ...obs, x: obs.x - velocityX }))
-    );
+    setObstacles(prev => prev.map(obs => ({ ...obs, x: obs.x - velocityX })));
   };
 
   const filterVisible = (newOffsetX: number) => {
