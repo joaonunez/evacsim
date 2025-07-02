@@ -2,7 +2,6 @@
 import React from "react";
 import type { Obstacle } from "../hooks/useObstacles";
 
-
 interface Props {
   obstacles: Obstacle[];
   worldOffsetX: number;
@@ -11,10 +10,9 @@ interface Props {
 
 const ObstaculosFisicos: React.FC<Props> = ({ obstacles, worldOffsetX, canvasWidth }) => {
   const cx = canvasWidth / 2;
-  const groundY = 480; // Altura base del suelo para los divs
 
   return (
-    <div className="absolute top-0 left-0 w-[500px] h-[500px] pointer-events-none overflow-hidden">
+    <div className="absolute top-0 left-0 w-[500px] h-[500px] pointer-events-none overflow-hidden z-10">
       {obstacles.map((obs, index) => {
         const screenX = obs.x - worldOffsetX + cx;
         if (screenX + obs.width < 0 || screenX > canvasWidth) return null;
@@ -28,7 +26,7 @@ const ObstaculosFisicos: React.FC<Props> = ({ obstacles, worldOffsetX, canvasWid
             className={`absolute ${color} border border-black`}
             style={{
               left: `${screenX}px`,
-              top: `${groundY - obs.height}px`,
+              top: `${obs.y}px`,
               width: `${obs.width}px`,
               height: `${obs.height}px`,
             }}

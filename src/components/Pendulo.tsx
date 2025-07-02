@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { useParallaxBackground } from "../hooks/useParallaxBackground";
 import { useObstacles } from "../hooks/useObstacles";
+import ObstaculosFisicos from "../components/ObstaculosFisicos";
 
 const Pendulo: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -243,7 +244,7 @@ const Pendulo: React.FC = () => {
   const linearVelocityKMH = linearVelocity * 60 * 3.6;
 
   return (
-    <div className="flex flex-col items-center mt-8">
+    <div className="flex flex-col items-center mt-8 relative">
       {!isLoaded ? (
         <p className="text-center mt-4">Cargando fondo...</p>
       ) : (
@@ -321,9 +322,13 @@ const Pendulo: React.FC = () => {
           Aplicar Cambios
         </button>
       </div>
-      <p className="text-xs text-gray-500 mt-2">
-        Obstáculos en pantalla: {obstacles.length}
-      </p>
+      {isDropped && (
+        <ObstaculosFisicos
+          obstacles={obstacles}
+          worldOffsetX={worldOffsetX}
+          canvasWidth={500}
+        />
+      )}
     </div>
   );
 };

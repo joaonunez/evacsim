@@ -16,7 +16,7 @@ export const useObstacles = () => {
 
   const generate = (worldOffsetX: number, canvasWidth: number, canvasHeight: number) => {
     const distanceFromLast = (worldOffsetX + canvasWidth) - lastX;
-    if (distanceFromLast < 150) return; // más sensible
+    if (distanceFromLast < 150) return;
 
     const type = Math.floor(Math.random() * 3) + 1;
     const obsWidth = type === 1 ? 40 : type === 2 ? 60 : 100;
