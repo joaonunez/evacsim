@@ -1,35 +1,42 @@
+//importaciones de herramiendas necesarias
 import React, { useRef, useEffect, useState } from "react";
 import { useParallaxBackground } from "../hooks/useParallaxBackground";
 import { useObstacles } from "../hooks/useObstacles";
 import ObstaculosFisicos from "../components/ObstaculosFisicos";
 
 const Pendulo: React.FC = () => {
+
+
+  //importamos canvas para poder usar la bola  y el pendulo 
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  //estados de velocidad
   const [selectedSpeed, setSelectedSpeed] = useState(4); // valor por defecto (×1)
   const [appliedSpeed, setAppliedSpeed] = useState(4); // se usará para movimiento
 
-  // Péndulo y física
+  // Estados de Péndulo y física
   const [theta, setTheta] = useState(Math.PI / 4);
   const [thetaVel, setThetaVel] = useState(0.05); // Movimiento inicial
   const [isRunning, setIsRunning] = useState(true);
   const [isDropped, setIsDropped] = useState(false);
   const [selectedGravity, setSelectedGravity] = useState(0.4); // valor por defecto
   const [appliedGravity, setAppliedGravity] = useState(0.4); // se usará para saltar
-
+  
+  //variables importantes para el pendulo
   const length = 150;
   const pxToMeters = 1 / 100;
   const lengthMeters = length * pxToMeters;
   const damping = 0.995;
 
-  // Bola y mundo
-  const [freeFallY, setFreeFallY] = useState(0);
-  const [freeFallVelY, setFreeFallVelY] = useState(0);
-  const [velocityX, setVelocityX] = useState(0);
+  // estados Bola y mundo
+  const [freeFallY, setFreeFallY] = useState(0); //caida
+  const [freeFallVelY, setFreeFallVelY] = useState(0); //caiuda libre
+  const [velocityX, setVelocityX] = useState(0); //estado de la velocidad
   const [worldOffsetX, setWorldOffsetX] = useState(0);
-  const [isJumping, setIsJumping] = useState(false);
-  const jumpStrength = -10;
+  const [isJumping, setIsJumping] = useState(false);//estado saltando
+  const jumpStrength = -10; //variable de fuerza de salto
 
   // Hooks
+  //el fondo de pantalla donde recorre la bola el mundo
   const {
     bgImage,
     update: updateParallax,
@@ -46,24 +53,33 @@ const Pendulo: React.FC = () => {
     reset: resetObstacles,
   } = useObstacles();
 
-  useEffect(() => {
-    if (!isLoaded) return;
 
+  useEffect(() => {
+    //si no esta cargada la vista de la pp se detiende la funcuion a seguir
+    //esto quiere decir que si el navegador aun no ha cargado correctamente la vista, se detendra y aun no se ejecutara los isguiente:
+    if (!isLoaded) return;
+    //renderizar el canvas necesario para dibujar la bola y el pendulo
     const canvas = canvasRef.current!;
+    //seteamos el contexto del canvas en 2d
     const ctx = canvas.getContext("2d")!;
     const cx = canvas.width / 2;
     const cy = 50;
 
+    //lectura de entradas de teclado que se asocia a un evento leido o monitorado
     const handleKeyDown = (e: KeyboardEvent) => {
+      //evento de tipo 1, cuando se acciona la flecha izquierda, avanza hacia la izquierda
       if (e.key === "ArrowLeft") setVelocityX(-appliedSpeed);
+      //se invierte la logica de arriba
       if (e.key === "ArrowRight") setVelocityX(appliedSpeed);
-
+      //en este caso la logica es que va a saltar
       if (e.key === "ArrowUp" && !isJumping) {
-        setFreeFallVelY(jumpStrength);
+        setFreeFallVelY(jumpStrength);//al saltar se declara cual sera la velocidad de caida en base al estado de caida libre que se aplica mediante el estado en la interfaz
+        //aqui declaramos el estado de esta saltando en verdadero
         setIsJumping(true);
       }
     };
     const handleKeyUp = (e: KeyboardEvent) => {
+      //si esta saltando si el estado es saltando seteamos la velocidad de la dimension X en 0
       if (e.key === "ArrowLeft" || e.key === "ArrowRight") setVelocityX(0);
     };
 
@@ -89,7 +105,9 @@ const Pendulo: React.FC = () => {
         );
       }
 
-      if (!isDropped) {
+
+      //aqui tenemos la funcion de la velocidad angular del pendulo
+      if (!isDropped) { //esta linea de codigo quiere decir que si la bola esta caida no se ejecutara nada del codigo siguiente 
         // Péndulo
         const thetaAcc = (-appliedGravity / length) * Math.sin(theta);
 
@@ -257,6 +275,7 @@ const Pendulo: React.FC = () => {
           style={{ background: "#eee" }}
         />
       )}
+      
       {!isDropped && (
         <>
           <p className="mt-4 text-center">
@@ -290,38 +309,39 @@ const Pendulo: React.FC = () => {
         </p>
       )}
       <div className="mt-4 flex flex-col items-center gap-2">
-        <label className="text-sm font-semibold">Velocidad de avance:</label>
-        <select
-          value={selectedSpeed}
-          onChange={(e) => setSelectedSpeed(parseInt(e.target.value))}
-          className="border px-2 py-1 rounded"
-        >
-          <option value={4}>14.40 km/h (Normal)</option>
-          <option value={8}>28.80 km/h (Media)</option>
-          <option value={12}>43.20 km/h (Alta)</option>
-        </select>
+  <label className="text-sm font-semibold">Velocidad de avance:</label>
+  <select
+    value={selectedSpeed}
+    onChange={(e) => setSelectedSpeed(parseInt(e.target.value))}
+    className="border px-2 py-1 rounded"
+  >
+    <option value={4}>14.40 km/h (Normal)</option>
+    <option value={8}>28.80 km/h (Media)</option>
+    <option value={12}>43.20 km/h (Alta)</option>
+  </select>
 
-        <label className="text-sm font-semibold mt-2">Gravedad:</label>
-        <select
-          value={selectedGravity}
-          onChange={(e) => setSelectedGravity(parseFloat(e.target.value))}
-          className="border px-2 py-1 rounded"
-        >
-          <option value={0.2}>🌕 Gravedad baja (0.2)</option>
-          <option value={0.4}>🌍 Gravedad normal (0.4)</option>
-          <option value={0.8}>🔥 Gravedad alta (0.8)</option>
-        </select>
+  <label className="text-sm font-semibold mt-2">Gravedad simulada:</label>
+  <select
+    value={selectedGravity}
+    onChange={(e) => setSelectedGravity(parseFloat(e.target.value))}
+    className="border px-2 py-1 rounded"
+  >
+    <option value={0.045}>🌕 Gravedad lunar (0.045)</option>
+    <option value={0.2725}>🌍 Gravedad terrestre (0.2725)</option>
+    <option value={0.688}>🔥 Gravedad alta (0.688)</option>
+  </select>
 
-        <button
-          onClick={() => {
-            setAppliedSpeed(selectedSpeed);
-            setAppliedGravity(selectedGravity);
-          }}
-          className="bg-green-600 text-white px-3 py-1 rounded mt-2"
-        >
-          Aplicar Cambios
-        </button>
-      </div>
+  <button
+    onClick={() => {
+      setAppliedSpeed(selectedSpeed);
+      setAppliedGravity(selectedGravity);
+    }}
+    className="bg-green-600 text-white px-3 py-1 rounded mt-2"
+  >
+    Aplicar Cambios
+  </button>
+</div>
+
       {isDropped && (
         <ObstaculosFisicos
           obstacles={obstacles}
