@@ -251,8 +251,8 @@ const Pendulo: React.FC = () => {
           onChange={(e) => setSelectedGravity(parseFloat(e.target.value))}
           className="border px-2 py-1 rounded"
         >
-          <option value={0.095}>🌕 Gravedad lunar (9.8)</option>
-          <option value={0.2725}>🌍 Gravedad terrestre (1.6)</option>
+          <option value={0.095}>🌕 Gravedad lunar (1.6)</option>
+          <option value={0.2725}>🌍 Gravedad terrestre (9.8)</option>
           <option value={0.688}>🔥 Gravedad alta (3.7)</option>
         </select>
 
