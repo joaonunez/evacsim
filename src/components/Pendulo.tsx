@@ -11,8 +11,8 @@ const Pendulo: React.FC = () => {
   const [thetaVel, setThetaVel] = useState(0.05);
   const [isRunning, setIsRunning] = useState(true);
   const [isDropped, setIsDropped] = useState(false);
-  const [selectedGravity, setSelectedGravity] = useState(0.4);
-  const [appliedGravity, setAppliedGravity] = useState(0.4);
+  const [selectedGravity, setSelectedGravity] = useState(0.2725);
+  const [appliedGravity, setAppliedGravity] = useState(0.2725);
 
   const length = 150;
   const pxToMeters = 1 / 100;
